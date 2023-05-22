@@ -6,7 +6,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        ajoGB: "url('../assets/bg2.png')",
+      },
+    },
   },
   plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar")],
 };

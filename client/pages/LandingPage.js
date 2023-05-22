@@ -8,7 +8,7 @@ function LandingPage() {
   const navigate = useRouter();
   useEffect(() => {
     setTimeout(() => {
-      navigate.push("/login");
+      navigate.push("/Onboard");
     }, 1500);
   });
   return (

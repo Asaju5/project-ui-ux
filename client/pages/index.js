@@ -1,5 +1,9 @@
 import Head from "next/head";
 import LandingPage from "./LandingPage";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:4000/api";
+axios.defaults.withCredentials = true;
 
 export default function Home() {
   return (

@@ -14,19 +14,10 @@ app.use(morgan("combined"));
 
 // connect to MongoBd
 mongoose
-  .connect(
-    "mongodb+srv://faysal-admin:admin12345@cluster0.weggr6r.mongodb.net/faysal?retryWrites=true&w=majority"
-  )
-  .then(() => {
-    console.log("Server is connected to MongoBd");
-  });
-
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("**DB CONNECTED**"))
+  .catch((err) => console.log("DB CONNECTION ERR => ", err));
 //routes
-
-app.get("/", (req, res) => {
-  res.status(200).send("home GET requested");
-});
-
 readdirSync("./routes").map((r) => app.use("/api", require(`./routes/${r}`)));
 
 const port = 4000;

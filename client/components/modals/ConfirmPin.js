@@ -16,7 +16,7 @@ function ConfirmPin({ isConfirmPin, onClose }) {
     setResult(res);
   };
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center">
       <div className="w-[600px] bg-[#0A221C] flex flex-col mx-4 rounded-lg py-2">
         <button
           onClick={() => onClose()}

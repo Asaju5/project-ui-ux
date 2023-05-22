@@ -66,14 +66,30 @@ function VerifyAccount() {
       <div className="flex justify-center items-center h-screen">
         <div className="w-[90%] lg:w-[50%] h-[70%] md:h-[85%] bg-[#0A221C] lg:mt-16 rounded-lg">
           <div className="flex flex-col items-center pt-12">
-            <h4 className="lg:text-3xl text-2xl font-bold text-[#4BF0A5] py-2">
-              Verify your account
-            </h4>
-            <span className="text-center sm:text-xs w-[1/2] text-white mb-4">
-              We've sent a verification code to olumideXZY@example.com
-            </span>
+            <div className="hidden lg:flex flex-col items-center">
+              <h4 className="lg:text-3xl text-2xl font-bold text-[#4BF0A5] py-2">
+                Verify your account
+              </h4>
+              <p className="text-center sm:text-xs w-[1/2] text-white mb-4">
+                We've sent a verification code to olumideXZY@example.com
+              </p>
+            </div>
+            <div className="lg:hidden flex flex-col items-center">
+              <h4 className="text-2xl font-bold text-[#4BF0A5] ">
+                We sent you a verification
+              </h4>
+              <h4 className="text-2xl font-bold text-[#4BF0A5]">
+                code to your email
+              </h4>
+              <p className="text-center sm:text-xs w-[1/2] text-white mb-4">
+                Enter the code sent to your email
+              </p>
+            </div>
 
-            <form className="flex flex-col pt-8" onSubmit={handleSubmit}>
+            <form
+              className="flex flex-col lg:pt-8 mt-16"
+              onSubmit={handleSubmit}
+            >
               <div className="space-y-6 flex flex-col items-center justify-center">
                 <div className="otp-cont sm:pt-4 lg:pt-8">
                   <AuthCode
@@ -89,15 +105,13 @@ function VerifyAccount() {
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-lg shadow-md bg-[#4BF0A5] font-semibold"
+                  className="w-full py-3 mt-4 rounded-lg shadow-md bg-[#4BF0A5] font-semibold"
                 >
                   Continue
                 </button>
-                <p>{otp}</p>
-                {otpvalid ? " " : <p>Invalid Otp</p>}
               </div>
 
-              <div className="text-sm mt-8 text-center font-medium text-white">
+              <div className="text-sm mt-8 text-center font-medium text-white pb-6">
                 Didn't receive any code?{" "}
                 <span className="text-[#4BF0A5] cursor-pointer">
                   Resend Code

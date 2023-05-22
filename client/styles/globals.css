@@ -6,6 +6,21 @@
   display: none;
 }
 
+.ajoMobile {
+  background-image: url("../assets/community.png");
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 body {
   background-color: rgb(17, 58, 47);
   font-family: "Montserrat", sans-serif;

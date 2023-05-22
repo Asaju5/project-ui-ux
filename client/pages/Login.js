@@ -1,157 +1,133 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { VscLoading } from "react-icons/vsc";
+import { useState, useContext } from "react";
 import { BsEyeSlashFill } from "react-icons/bs";
 import { IoEyeSharp } from "react-icons/io5";
-import { UserAuth } from "../context";
+import axios from "axios";
+import LoginMobile from "@/components/LoginMobile";
+import { useRouter } from "next/router";
+import { Context } from "@/context";
+import { AiOutlineLoading } from "react-icons/ai";
 
 function Login() {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [formError, setFormError] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useRouter();
-  const { createUser } = UserAuth();
+
+  const { state, dispatch } = useContext(Context);
+  console.log("state", state);
+
+  const Validate = () => {
+    let err = {};
+    const email_pattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (!password) {
+      err.password = "Password required";
+    }
+    if (!email || !email_pattern.test(email)) {
+      err.email = "Please enter a valid email";
+    }
+
+    setFormError({ ...err });
+    return Object.keys(err).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await createUser(email, password);
-      setLoading(true);
-      navigate.push("/VerifyAccount");
-      setName("");
-      setEmail("");
-      setPassword("");
-      setLoading(false);
-    } catch (error) {
-      setError(e.message);
-      console.log(error.message);
+    let isValid = Validate();
+    console.log(isValid);
+    if (isValid) {
+      try {
+        setLoading(true);
+        const { data } = await axios.post("http://localhost:4000/api/login", {
+          email,
+          password,
+        });
+        setLoading(false);
+        navigate.push("/HomeScreen");
+        dispatch({
+          type: "LOGIN",
+          payload: data,
+        });
+        localStorage.setItem("user", JSON.stringify(data));
+      } catch (error) {
+        console.log(error);
+        // Handle the error response
+      }
     }
   };
 
   return (
-    <section>
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
-        <p className="flex items-center mb-1 text-2xl md:text-4xl font-semibold text-[#4BF0A5] dark:text-white">
-          Welcome to Faysal
-        </p>
-        <p className="text-lg md:text-xl mb-6 text-white">
-          Complete your sign up to get started
-        </p>
+    <div className="flex flex-col">
+      <div className="hidden md:flex flex-col justify-center items-center">
+        <div className="bg-[#0A221C] rounded-lg p-4 flex flex-col items-center justify-center w-full h-screen">
+          <div className="flex flex-col text-center">
+            <h4 className="text-xl font-semibold text-[#4BF0A5]">
+              Welcome to back
+            </h4>
+            <p className="text-sm text-gray-200">Sign in to your account</p>
+          </div>
+          <form className="w-[300px] mt-16" onSubmit={handleSubmit}>
+            <div className="mx-4 bg-[#113A2F] p-1 flex flex-col rounded-md mb-4">
+              <p className="text-xs text-gray-400 ml-1">Email</p>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="p-0 border-none focus:outline-none bg-[#113A2F] focus:ring-0 mb-[1px] mx-1 text-gray-200"
+              />
+              <span className="text-red-500 text-xs">{formError.email}</span>
+            </div>
+            <div className="mx-4 bg-[#113A2F] p-1 flex flex-col rounded-md relative">
+              <p className="text-xs text-gray-400 ml-1">Password</p>
+              <input
+                type={visible ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="********"
+                className="p-0 border-none focus:outline-none bg-[#113A2F] focus:ring-0 mb-[1px] mx-1
+             text-gray-200 placeholder:text-white items-center"
+              />
 
-        <div
-          className="w-full bg-[#0A221C] rounded-lg shadow dark:border md:mt-0 lg:min-w-[50%] sm:max-w-md xl:p-0
-         dark:bg-gray-800 dark:border-gray-700"
-        >
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <form className="space-y-4 md:space-y-6" onClick={handleSubmit}>
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-400 dark:text-white">
-                  Name
-                </label>
-
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="bg-[#113A2F] border-0 text-gray-300 outline-none font-semibold sm:text-sm rounded-lg
-                   focus:ring-0 focus:border-0 block w-full p-2.5 dark:bg-gray-700
-                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500
-                     dark:focus:border-green-500"
+              {visible ? (
+                <BsEyeSlashFill
+                  size={20}
+                  className="absolute right-3 bottom-2 text-white"
+                  onClick={() => setVisible(false)}
                 />
-              </div>
-
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-400 dark:text-white">
-                  Email
-                </label>
-                <input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="email"
-                  className="bg-[#113A2F] border-0 text-gray-300 outline-none font-semibold sm:text-sm rounded-lg
-                   focus:ring-0 focus:border-0 block w-full p-2.5 dark:bg-gray-700
-                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500
-                     dark:focus:border-green-500"
+              ) : (
+                <IoEyeSharp
+                  size={20}
+                  className="absolute right-3 bottom-2 text-white"
+                  onClick={() => setVisible(true)}
                 />
-              </div>
+              )}
+              <span className="text-red-500 text-xs">{formError.password}</span>
+            </div>
+            <div className="mx-4 mt-5 flex items-center gap-2"></div>
 
-              <div>
-                <label className="block mb-2 text-sm font-medium text-gray-400 dark:text-white">
-                  Password
-                </label>
-                <div className="relative">
-                  <input
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    type={visible ? "text" : "password"}
-                    className="bg-[#113A2F] border-0 text-gray-300 outline-none font-semibold sm:text-sm rounded-lg
-                   focus:ring-0 focus:border-0 block w-full p-2.5 dark:bg-gray-700
-                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-green-500
-                     dark:focus:border-green-500"
-                  />
-
-                  {visible ? (
-                    <IoEyeSharp
-                      size={25}
-                      className="text-white absolute right-1 top-1"
-                      onClick={() => setVisible(false)}
-                    />
-                  ) : (
-                    <BsEyeSlashFill
-                      size={25}
-                      className="text-white absolute right-1 top-1"
-                      onClick={() => setVisible(true)}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="flex items-start">
-                <div className="flex items-center h-5">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 border text-green-950 border-white rounded bg-gray-50 focus:ring-3 focus:ring-green-900
-                    active:bg-green-950
-                     dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                  />
-                </div>
-                <div className="ml-3 text-sm">
-                  <label className="font-normal text-gray-500 dark:text-gray-300">
-                    By signing up, you agree to the{" "}
-                    <Link
-                      href="/"
-                      className="text-[#4BF0A5] hover:underline dark:text-primary-500 font-thin"
-                    >
-                      <p> Terms of Service and Policy.</p>
-                    </Link>
-                  </label>
-                </div>
-              </div>
-
+            <div className="mx-4 mt-6 flex items-center justify-center">
               <button
                 type="submit"
-                className="w-full text-[#0A221C] bg-[#4BF0A5]
-                 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600
-                 flex items-center justify-center
-                dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="border border-[#4BF0A5] py-2 rounded-lg w-full text-[#4BF0A5]"
               >
                 {loading ? (
-                  <VscLoading
-                    size={20}
-                    className="flex items-center animate-spin"
-                  />
+                  <div className="flex items-center justify-center">
+                    <AiOutlineLoading className="animate-spin" />
+                  </div>
                 ) : (
                   "Continue"
                 )}
               </button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
-    </section>
+      <div className="flex flex-col md:hidden">
+        <LoginMobile />
+      </div>
+    </div>
   );
 }
 

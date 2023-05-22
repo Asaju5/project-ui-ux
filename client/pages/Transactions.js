@@ -121,7 +121,7 @@ function Transactions() {
               </div>
             </div>
           </div>
-          <div className="flex justify-center text-white order-1 lg:order-2 p-4 relative">
+          <div className="flex justify-end text-white order-1 lg:order-2 p-4 relative">
             <Headertwo />
           </div>
         </div>

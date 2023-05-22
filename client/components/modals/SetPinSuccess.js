@@ -1,6 +1,5 @@
 import React from "react";
 import { IoIosCheckmark } from "react-icons/io";
-import { motion } from "framer-motion";
 
 function SetPinSuccess({ isSuccessful, onClose }) {
   if (!isSuccessful) return null;

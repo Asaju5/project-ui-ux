@@ -12,11 +12,9 @@ import {
 import foto from "../assets/user.png";
 import logo from "../assets/Vector.png";
 import Link from "next/link";
-import { UserAuth } from "../context";
 
 function Header() {
   const [open, setOpen] = useState(false);
-  const { user } = UserAuth();
 
   return (
     <div className="flex w-full">
@@ -26,9 +24,7 @@ function Header() {
         </div>
         <div className="flex flex-col items-center mt-4">
           <h4 className="text-xs text-gray-300">Welcome back</h4>
-          <h2 className="text-xl font-semibold text-gray-200">
-            {user && user.email}
-          </h2>
+          <h2 className="text-xl font-semibold text-gray-200">User</h2>
         </div>
         <div />
 
@@ -109,9 +105,7 @@ function Header() {
           <h4 className="text-lg text-gray-200 md:text-sm">
             Welcome to your Faysal
           </h4>
-          <h2 className="text-2xl font-bold text-white">
-            {user && user.email}
-          </h2>
+          <h2 className="text-2xl font-bold text-white">User</h2>
         </div>
         <div className="md:hidden  lg:flex  items-center gap-4">
           <Image src={foto} alt=".." priority quality={60} />

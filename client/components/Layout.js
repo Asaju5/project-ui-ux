@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "./Sidebar";
 
-function Layout({ children, hideHeader }) {
+function Layout({ children }) {
   return (
     <div className="flex gap-5 min-h-screen">
       <div className="hidden md:flex">
